@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<title>Surf Command and Control Interface</title>
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script type="text/javascript" src="roslib.js"></script>
+  <script type="text/javascript" src="leaflet-color-markers.js"></script>
+  <script type="text/javascript" src="control.js"></script>
+
+  <style>
+
+  html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+  </style>
+<body class="w3-light-grey">
+
+
+  <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+    <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+    <span class="w3-bar-item w3-right">Logo</span>
+  </div>
+
+  <!-- Sidebar/menu -->
+  <nav class="w3-sidebar w3-collapse w3-teal w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+    <!--div class="w3-container w3-row">
+    <div class="w3-col s4">
+    <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
+  </div>
+  <div class="w3-col s8 w3-bar">
+  <span>Welcome, <strong>Mike</strong></span><br>
+  <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+  <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+  <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+</div>
+</div-->
+
+<div class="w3-container">
+  <h5>Menu</h5>
+</div>
+<div class="w3-bar-block">
+  <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+  <a href="index.html" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Dashboard</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-tv fa-fw"></i>  Command and Control</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Surf Viewer</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
+</div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+  <!-- !PAGE CONTENT! -->
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+
+
+    <div class ="w3-half">
+      <div class="w3-row-padding w3-margin-top w3-margin-bottom">
+        <div class="w3-third">
+          <div class="w3-center w3-half">
+              <button onclick="selectAll()" class="w3-button w3-dark-gray">Select All</button>
+          </div>
+          <div class="w3-center w3-half">
+              <button onclick="clearAll()" class="w3-button w3-dark-gray">Clear</button>
+          </div>
+        </div>
+
+        <div class="w3-third">
+          <div class="w3-half w3-center">
+              <button onclick="setGroup()" class="w3-button w3-dark-gray">Define Group</button>
+          </div>
+
+            <div class="w3-third w3-dropdown-hover w3-center">
+              <button onmouseover="groupBtnHover()" class="w3-button w3-dark-gray">Select Group</button>
+              <div id="group_dropdown" class="w3-dropdown-content w3-bar-block w3-border">
+              </div>
+            </div>
+              <!--div class="w3-half w3-dropdown-hover w3-center" id="container">
+                <script language="javascript">
+                groupSelect();
+                </script>
+
+              </div-->
+
+        </div>
+
+
+          <div class="w3-third w3-dropdown-hover w3-centered" >
+            <button onmouseover="behaviorBtnHover()" class="w3-button w3-dark-gray">Set Behavior</button>
+            <div id="behavior_dropdown" class="w3-dropdown-content w3-bar-block w3-border">
+            </div>
+          </div>
+      </div>
+
+      <div class="w3-col" id="table-div">
+        <table class="w3-table-all w3-striped w3-white w3-hoverable w3-centered" id="table-obj">
+
+          <script language="javascript">
+          createTable();
+          </script>
+        </table>
+      </div>
+
+      <div id="status-div" class="w3-margin-top ">
+        <h4 class = "w3-center"> Mission Information</h4>
+
+      </div>
+    </div>
+
+    <div class = "w3-half w3-margin-top">
+      <h4 id="info_console">The textarea element</h4>
+      <div id="mapid" style="width: 600px; height: 600px; position: relative;"
+        class="leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"></div>
+
+      <script language="javascript">
+        var map = L.map('mapid',{
+            crs: L.CRS.Simple, minZoom: -1,  zoomSnap: 0.25, zoomControl: false, doubleClickZoom: false, scrollWheelZoom: false,
+            dragging: false});
+        var yx = L.latLng;
+
+        var bounds = [[13.26,-1.524],[0,11.73]] //Bounds of Surf
+        var image = L.imageOverlay('img/surf_drawings.png',bounds).addTo(map);
+        initializeMap();
+      </script>
+
+      <div class="w3-third w3-dropdown-hover w3-centered" >
+        <button class="w3-button w3-dark-gray">Create Mission</button>
+        <div id="mission_dropdown" class="w3-dropdown-content w3-bar-block w3-border">
+          <a onclick="pointCb()" class="w3-bar-item w3-button">Point</a>
+          <a onclick="pathCb()" class="w3-bar-item w3-button">Path</a>
+          <a onclick="polygonCb()" class="w3-bar-item w3-button">Polygon</a>
+          <a onclick="rectangleCb()" class="w3-bar-item w3-button">Rectangle</a>
+        </div>
+      </div>
+
+      <div class ="w3-third w3-centered">
+          <button onclick="pushMissionCb()" class="w3-button w3-dark-gray">Push Mission</button>
+      </div>
+      <div class ="w3-third w3-centered">
+          <button onclick="clearMissionCb()" class="w3-button w3-dark-gray">Clear Mission</button>
+      </div>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
